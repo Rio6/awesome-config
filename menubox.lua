@@ -161,7 +161,7 @@ end
 -- @tparam number|screen scr Screen
 -- @return table List of items for current page.
 local function get_current_page(all_items, query, scr)
-    local available_space = instance.geometry.height - 20
+    local available_space = instance.geometry.height - beautiful.xresources.apply_dpi(20)
     local height_sum = 0
     local current_page = {}
     for i, item in ipairs(all_items) do
@@ -281,6 +281,9 @@ local function menulist_update(scr)
     -- Insert a run item value as the last choice
     table.insert(shownitems, { name = "Exec: " .. query, cmdline = query, icon = nil })
 
+    -- And a quit button
+    table.insert(shownitems, { name = "Exit", cmdline = "", icon = nil })
+
     if #shownitems > 0 then
         if current_item > #shownitems then
             current_item = #shownitems
@@ -305,7 +308,6 @@ menubox.widget_template.create_callback = function(w, _, i)
         if btn == 1 then
             perform_action(shownitems[current_item])
             menubox.hide()
-            awful.keygrabber.stop()
         end
     end)
 end
@@ -328,11 +330,11 @@ end
 -- @param comm The current command in the prompt.
 -- @return if the function processed the callback, new awful.prompt command, new awful.prompt prompt text.
 local function prompt_keypressed_callback(mod, key, comm)
-    if key == "Up" or (mod.Control and key == "k") then
-        current_item = math.max(current_item - 1, 1)
+    if key == "Up" or (mod.Control and key == "k") or key == "XF86AudioRaiseVolume" then
+        current_item = (current_item - 2 + #shownitems) % #shownitems + 1
         return true
-    elseif key == "Down" or (mod.Control and key == "j") then
-        current_item = current_item + 1
+    elseif key == "Down" or (mod.Control and key == "j") or key == "XF86AudioLowerVolume" then
+        current_item = (current_item) % #shownitems + 1
         return true
     elseif key == "BackSpace" then
         if comm == "" and current_category then
@@ -352,7 +354,7 @@ local function prompt_keypressed_callback(mod, key, comm)
     elseif key == "End" then
         current_item = #shownitems
         return true
-    elseif key == "Return" or key == "KP_Enter" then
+    elseif key == "Return" or key == "KP_Enter" or key == "XF86PowerOff" then
         if mod.Control then
             current_item = #shownitems
             if mod.Mod1 then
@@ -361,6 +363,7 @@ local function prompt_keypressed_callback(mod, key, comm)
                         .. " -e " .. shownitems[current_item].cmdline
             end
         end
+        menubox.hide()
         return perform_action(shownitems[current_item])
     end
     return false
@@ -454,6 +457,7 @@ function menubox.hide()
     if instance then
         instance.wibox.visible = false
         instance.query = nil
+        awful.keygrabber.stop()
     end
 end
 

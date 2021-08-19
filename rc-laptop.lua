@@ -8,7 +8,7 @@ local gears = require("gears")
 require("awful.autofocus")
 
 local wm = require("wm")
-beautiful.init("~/.config/awesome/theme.lua")
+beautiful.init(gears.filesystem.get_configuration_dir() .. "/theme.lua")
 beautiful.theme_assets.recolor_layout(beautiful, beautiful.fg_dark)
 
 -- Custom widgets and other stuff

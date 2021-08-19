@@ -1,6 +1,5 @@
----------------------------
--- Default awesome theme --
----------------------------
+local xresources = require("beautiful.xresources")
+local dpi = xresources.apply_dpi
 
 local theme = {}
 
@@ -31,7 +30,7 @@ theme.border_width  = 1
 theme.border_normal = "#000000"
 theme.border_focus  = theme.bg_focus
 theme.border_marked = "#404040"
-theme.bar_height = 22
+theme.bar_height = dpi(22)
 
 theme.menu_border_width = 1
 theme.menu_border_color = theme.border_focus
@@ -62,8 +61,8 @@ theme.tasklist_bg_urgent = theme.bg_urgent
 -- menu_[bg|fg]_[normal|focus]
 -- menu_[border_color|border_width]
 theme.menu_submenu_icon = "/usr/share/awesome/themes/default/submenu.png"
-theme.menu_height = 15
-theme.menu_width  = 100
+theme.menu_height = dpi(15)
+theme.menu_width  = dpi(100)
 
 -- You can add as many variables as
 -- you wish and access them by using
