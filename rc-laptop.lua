@@ -262,8 +262,11 @@ awful.screen.connect_for_each_screen(function(s)
             --awful.widget.keyboardlayout(),
             wibox.widget.textbox(" "),
             pac_widget,
+            wibox.widget.textbox(" "),
             pwr_widget("BAT0"),
+            wibox.widget.textbox(" "),
             wifi_widget("wlp0s20f3"),
+            wibox.widget.textbox(" "),
             sound_widget,
             wibox.widget.textbox(" "),
             {
