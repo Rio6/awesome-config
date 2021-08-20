@@ -23,9 +23,9 @@ function sound_widget:volume(action)
         local volu, mute = output:match("%[([0-9.,]+)%%%].*%[([onf]+)%]")
 
         if mute ~= "on" or volu == nil then
-            self:set_text("00 ﱝ ") -- for some reason this icon reverses the text
+            self:set_text("00 ﱝ ") -- for some reason this icon reverses the text
         else
-            self:set_text(string.format(" 墳 %02d", volu))
+            self:set_text(string.format(" 墳 %02d", volu))
         end
     end)
 end

@@ -11,6 +11,8 @@ beautiful.init(gears.filesystem.get_configuration_dir() .. "/theme.lua")
 beautiful.theme_assets.recolor_layout(beautiful, beautiful.fg_dark)
 
 local menubox = require("menubox")
+local pwr_widget = require("pwr_widget")
+local wifi_widget = require("wifi_widget")
 
 -- {{{ Error handling
 -- Check if awesome encountered an error during startup and fell back to
@@ -59,7 +61,6 @@ awful.layout.layouts = {
 
 -- {{{ Menu
 mainmenu = awful.menu({ items = {{ "restart", awesome.restart, beautiful.awesome_icon }}})
-launcher = awful.widget.launcher({ image = beautiful.awesome_icon, menu = mainmenu })
 
 -- Menubar configuration
 menubox.utils.terminal = terminal -- Set the terminal for applications that require it
@@ -73,6 +74,7 @@ local textclock = wibox.widget {
     widget = wibox.widget.textclock('<span color="' .. beautiful.fg_dark .. '"> %w|%m%d|%H%M%S </span>', 1),
     align = "right",
     font = beautiful.font_large,
+    buttons = awful.button({ }, 1, function(w) mainmenu:toggle { coords = w.geometry } end)
 }
 
 -- Create a wibox for each screen and add it
@@ -119,7 +121,7 @@ local function set_wallpaper(s)
         if type(wallpaper) == "function" then
             wallpaper = wallpaper(s)
         end
-        gears.wallpaper.maximized(wallpaper, s, true)
+        gears.wallpaper.maximized(wallpaper, s, false, { x = 0, y = 0 })
     end
 end
 
@@ -134,7 +136,7 @@ awful.screen.connect_for_each_screen(function(s)
     for i = 1, 4 do
        awful.tag.add(tostring(i), {
           screen = s,
-          layout = awful.layout.layouts[1],
+          layout = awful.layout.layouts[2],
           column_count = 4,
        })
     end
@@ -198,12 +200,24 @@ awful.screen.connect_for_each_screen(function(s)
             },
             s.taglist,
         },
-        s.tasklist, -- Middle widget
+        {
+            widget = wibox.container.margin,
+            left = dpi(20),
+            right = dpi(20),
+            {
+                layout = wibox.layout.flex.horizontal,
+                pwr_widget("axp20x-battery"),
+                wifi_widget("wlan0"),
+            }
+        },
         { -- Right widgets
-            layout = wibox.layout.fixed.horizontal,
-            wibox.widget.systray(),
+            widget = wibox.container.background,
+            shape = function(cr, w, h)
+                gears.shape.parallelogram(cr, w+20, h, w+10)
+            end,
+            forced_width = 270,
+            bg = beautiful.bg_colored,
             textclock,
-            launcher,
         },
     }
 end)
@@ -220,7 +234,7 @@ root.buttons(gears.table.join(
 -- {{{ Key bindings
 globalkeys = gears.table.join(
     -- Standard program
-    awful.key({ }, "XF86AudioRaiseVolume", function() awful.spawn(terminal) end),
+    awful.key({ }, "XF86AudioRaiseVolume", function() awful.spawn(os.getenv("HOME") .. "/.local/bin/keyboard toggle") end),
     awful.key({ }, "XF86PowerOff", function() menubox.show() end)
 )
 
@@ -289,6 +303,7 @@ root.keys(globalkeys)
                 ontop = true,
                 sticky = true,
                 focusable = false,
+                tags = {},
             },
             callback = function(c)
                 c:struts { bottom = c.height }

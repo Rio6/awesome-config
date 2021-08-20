@@ -13,17 +13,17 @@ local function wifi_widget(ifname)
     local function update_wifi()
         local up = false
         for line in io.lines("/proc/net/wireless") do
-            rst = line:match(ifname .. ": +%d+ +(%d+)")
+            rst = line:match(ifname .. ": +%d+ +%d+. +-*(%d+)")
             if rst ~= nil then
                 local level = tonumber(rst)
-                wifi_widget:set_markup(string.format(" 直 %02.0f", level))
+                wifi_widget:set_markup(string.format("直 %02.0f", level))
                 up = true
                 break
             end
         end
         
         if not up then
-            wifi_widget:set_markup(" 睊 00")
+            wifi_widget:set_markup("睊 00")
         end
     end
 

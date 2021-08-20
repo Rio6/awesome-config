@@ -281,9 +281,6 @@ local function menulist_update(scr)
     -- Insert a run item value as the last choice
     table.insert(shownitems, { name = "Exec: " .. query, cmdline = query, icon = nil })
 
-    -- And a quit button
-    table.insert(shownitems, { name = "Exit", cmdline = "", icon = nil })
-
     if #shownitems > 0 then
         if current_item > #shownitems then
             current_item = #shownitems
