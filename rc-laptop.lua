@@ -25,6 +25,7 @@ local disk_widget = require("disk_widget")
 local sound_widget = require("sound_widget")
 local mpc_widget = require("mpc_widget")
 local array_search = require("array_search")
+local pie_layout = require("pie_layout")
 
 -- Handle runtime errors after startup
 do
@@ -321,6 +322,22 @@ awful.screen.connect_for_each_screen(function(s)
         },
     }
 end)
+
+local r, o = pcall(function()
+    local tw = awful.wibar { position = "left", screen = screen.primary, height = 500, width = 500 }
+    tw:setup {
+        widget = pie_layout,
+        radius = 250,
+        forced_num_cols = 3,
+        wibox.container.background(wibox.widget.textbox("hello"), '#ff0000'),
+        wibox.container.background(wibox.widget.textbox("hello"), '#00ff00'),
+        wibox.container.background(wibox.widget.textbox("hello"), '#ffff00'),
+        wibox.container.background(wibox.widget.textbox("hello"), '#0000ff'),
+        wibox.container.background(wibox.widget.textbox("hello"), '#ff00ff'),
+        wibox.container.background(wibox.widget.textbox("hello"), '#ffffff'),
+    }
+end)
+if not r then print(o) end
 
 -- Key bindings
 globalkeys = awful.util.table.join(
