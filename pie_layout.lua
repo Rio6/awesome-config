@@ -34,6 +34,10 @@ local function triangle_base(r, th)
     return math.sqrt(2 * r^2 - 2 * r^2 * math.cos(th * tau))
 end
 
+local function chord_dist(r, th)
+    return r - r * math.cos(th * tau / 2)
+end
+
 function pie:layout(ctx, width, height)
     local result = {}
 
@@ -51,6 +55,7 @@ function pie:layout(ctx, width, height)
         local th = v.row_span / num_cols * arc
         local w = triangle_base(r, th)
         local h = radius / num_rows
+        h = h + chord_dist(r - h, th)
 
         local rot = (ncol[v.row] - 1) / num_cols * arc + rotation
         ncol[v.row] = ncol[v.row] + 1
