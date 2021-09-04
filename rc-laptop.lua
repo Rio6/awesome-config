@@ -322,22 +322,31 @@ awful.screen.connect_for_each_screen(function(s)
         },
     }
 end)
-
+--[[
 local r, o = pcall(function()
-    local tw = awful.wibar { position = "left", screen = screen.primary, height = 500, width = 500 }
-    tw:setup {
+    local pie = wibox.widget {
         widget = pie_layout,
-        radius = 250,
-        forced_num_cols = 3,
-        wibox.container.background(wibox.widget.textbox("hello"), '#ff0000'),
-        wibox.container.background(wibox.widget.textbox("hello"), '#00ff00'),
-        wibox.container.background(wibox.widget.textbox("hello"), '#ffff00'),
-        wibox.container.background(wibox.widget.textbox("hello"), '#0000ff'),
-        wibox.container.background(wibox.widget.textbox("hello"), '#ff00ff'),
-        wibox.container.background(wibox.widget.textbox("hello"), '#ffffff'),
+        force_radius = 250,
+    }
+
+    for i = 2, 3 do
+        for j = 1, 3 do
+            pie:add_widget_at(wibox.widget {
+                widget = wibox.widget.textbox,
+                text = "hello",
+                align = "center",
+            }, i, j)
+        end
+    end
+
+    local tw = awful.popup {
+        screen = screen[1],
+        shape = pie:shape(),
+        widget = pie,
     }
 end)
 if not r then print(o) end
+--]]
 
 -- Key bindings
 globalkeys = awful.util.table.join(

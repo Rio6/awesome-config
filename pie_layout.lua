@@ -9,7 +9,7 @@ local tau = math.pi * 2
 local pie = { mt = {} }
 
 local properties = {
-    "radius",
+    "force_radius",
     "arc",
     "rotation",
 }
@@ -75,8 +75,22 @@ function pie:layout(ctx, width, height)
 end
 
 function pie:fit(ctx, width, height)
-    self._private.radius = math.min(width, height) / 2
-    return width, height
+    local radius = self._private.force_radius or math.min(width, height) / 2
+
+    local arc, rotation = self._private.arc, self._private.rotation
+    local num_rows, num_cols = self._private.num_rows, self._private.num_cols
+
+    for _, v in pairs(self._private.widgets) do
+        local r = v.row / num_rows * radius
+        local th = v.row_span / num_cols * arc
+        local w = triangle_base(r, th)
+        local h = radius / num_rows
+        base.fit_widget(self, ctx, v.widget, w, h)
+    end
+
+    self._private.radius = radius
+
+    return 2*radius, 2*radius
 end
 
 function pie:add_widget_at(widget, ...)
@@ -87,12 +101,19 @@ function pie:add_widget_at(widget, ...)
     }, ...)
 end
 
+function pie:shape()
+    local rot, arc = self._private.rotation - 0.25, self._private.arc
+    return function(cr, w, h)
+        return shape.pie(cr, w, h, (rot - arc / 2) * tau, (rot + arc / 2) * tau, self._private.radius)
+    end
+end
+
 function pie.new()
     local widget = grid("vertical")
 
     gtable.crush(widget, pie, true)
 
-    widget._private.radius = 100
+    widget._private.radius = widget._private.force_radius or 100
     widget._private.arc = 0.25
     widget._private.rotation = 0
 
