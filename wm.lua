@@ -30,8 +30,9 @@ client.connect_signal("focus", function(c) c.border_color = beautiful.border_foc
 client.connect_signal("unfocus", function(c) c.border_color = beautiful.border_normal end)
 
 -- Window swallowing
-local swallow = {
-    "XTerm"
+local swallow_rule = {
+    rule = { class = "XTerm" },
+    except = { name = "^%[WeeChat [%d.]+%]" },
 }
 
 local function is_tiled(c)
@@ -54,7 +55,7 @@ client.connect_signal("manage", function(c)
         end
 
         -- window swallowing
-        if gears.table.hasitem(swallow, prev.class) and not gears.table.hasitem(swallow, c.class) then
+        if awful.rules.matches(prev, swallow_rule) and not awful.rules.matches(c, swallow_rule) then
             -- Restore swalowee when child is not tiled
             c:connect_signal("property::floating_geometry", function(c)
                 if not is_tiled(c) then
