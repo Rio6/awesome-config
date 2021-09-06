@@ -13,10 +13,6 @@ local sys_menu = wibox {
 
 local keys = {}
 
-function logout()
-    awful.spawn.with_shell("s6-rc -l /tmp/$USER/s6/$DISPLAY/live/ -da change && s6-svscanctl -t /tmp/$USER/s6/$DISPLAY/service/")
-end
-
 local function item(text, key, callback)
     local widget = wibox.widget {
         widget = wibox.widget.textbox,
@@ -33,10 +29,10 @@ end
 
 local layout = wibox.layout.flex.vertical()
 layout:add(
-    item("Poweroff", "S", function() logout(); awful.spawn.with_shell("s6-sudo /run/s6-power-sudod poweroff") end),
-    item("Reboot", "R", function() logout(); awful.spawn.with_shell("s6-sudo /run/s6-power-sudod reboot") end),
-    item("Suspend", "D", function() awful.spawn.with_shell("s6-sudo /run/s6-power/sudod zzz") end),
-    item("Logout", "L", logout),
+    item("Poweroff", "S", function() awful.spawn("s6-sudo /run/s6-power-sudod poweroff") end),
+    item("Reboot", "R", function() awful.spawn("s6-sudo /run/s6-power-sudod reboot") end),
+    item("Suspend", "D", function() awful.spawn("s6-sudo /run/s6-power/sudod zzz") end),
+    item("Logout", "L", awesome.quit),
     item("Lock", "l", function() awful.spawn.with_shell("xset s activate && sleep 0.5 && xset dpms force off") end)
 )
 
