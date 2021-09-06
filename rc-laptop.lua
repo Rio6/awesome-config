@@ -25,6 +25,7 @@ local disk_widget = require("disk_widget")
 local sound_widget = require("sound_widget")
 local mpc_widget = require("mpc_widget")
 local array_search = require("array_search")
+local backlight = require("backlight")
 local pie_layout = require("pie_layout")
 
 -- Handle runtime errors after startup
@@ -449,8 +450,8 @@ globalkeys = awful.util.table.join(
     awful.key({ modkey }, "#106", function() mpc_widget:update("prev") end),    -- KP slash
     awful.key({ modkey }, "#82", function() mpc_widget:update("next") end),     -- KP minus
     awful.key({ modkey }, "#86", function() mpc_widget:update("stop") end),     -- KP plus
-    awful.key({ }, "XF86MonBrightnessUp", function() awful.spawn.with_shell("xbacklight -inc 5") end),
-    awful.key({ }, "XF86MonBrightnessDown", function() awful.spawn.with_shell("xbacklight -dec 5") end),
+    awful.key({ }, "XF86MonBrightnessUp", function() backlight.inc(0.05) end),
+    awful.key({ }, "XF86MonBrightnessDown", function() backlight.inc(-0.05) end),
     awful.key({ "Control", "Mod1" }, "k", function () awful.spawn.with_shell("xkill") end),
     awful.key({ modkey }, "/", translate.toggle)
 )
