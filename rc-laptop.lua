@@ -58,6 +58,7 @@ awful.layout.layouts = {
 
 -- wm configs
 awful.mouse.snap.edge_enabled = false
+awful.mouse.drag_to_tag.enabled = true
 
 -- Menubar configuration
 menubox.utils.terminal = terminal -- Set the terminal for applications that require it
