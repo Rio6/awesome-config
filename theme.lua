@@ -1,5 +1,7 @@
+local shape = require("gears.shape")
 local xresources = require("beautiful.xresources")
 local dpi = xresources.apply_dpi
+local naughty = require("naughty")
 
 local theme = {}
 
@@ -92,7 +94,17 @@ theme.awesome_icon = "/usr/share/awesome/icons/awesome16.png"
 
 -- Define the icon theme for application icons. If not set then the icons
 -- from /usr/share/icons and /usr/share/icons/hicolor will be used.
-theme.icon_theme = nil
+theme.icon_theme = "Adwaita"
+
+theme.notification_font = theme.font_large
+theme.notification_icon_size = dpi(80)
+theme.notification_width = dpi(400)
+theme.notification_height = dpi(100)
+theme.notification_max_width = dpi(800)
+theme.notification_shape = function(cr, w, h) return shape.octogon(cr, w, h, w * 0.04) end
+theme.notification_border_color = theme.bg_colored
+theme.notification_border_width = 2
+naughty.config.defaults.margin = dpi(10) -- bug in naughty makes it not read margin from theme
 
 return theme
 
