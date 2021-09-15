@@ -28,7 +28,7 @@ local pac_widget = wibox.widget {
 local function update()
     if cmd_timer ~= nil then return end
 
-    local cmd = "pacaur -Qu --color=never | awk '{ print($3, $4, $5, $6) }' | column -t"
+    local cmd = "pacaur -Qu --color=never | awk '{ if(length($5) > 0) print($3, $4, $5, $6); }' | column -t"
 
 
     awful.spawn.easy_async_with_shell(cmd, function(stdout, stderr)
