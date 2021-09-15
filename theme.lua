@@ -99,12 +99,10 @@ theme.icon_theme = "Adwaita"
 theme.notification_font = theme.font_large
 theme.notification_icon_size = dpi(80)
 theme.notification_width = dpi(400)
-theme.notification_height = dpi(100)
-theme.notification_max_width = dpi(800)
 theme.notification_shape = function(cr, w, h) return shape.octogon(cr, w, h, w * 0.04) end
-theme.notification_border_color = theme.bg_colored
+theme.notification_border_color = theme.fg_dim
 theme.notification_border_width = 2
-naughty.config.defaults.margin = dpi(10) -- bug in naughty makes it not read margin from theme
+naughty.config.defaults.margin = dpi(20) -- bug in naughty makes it not read margin from theme
 
 return theme
 

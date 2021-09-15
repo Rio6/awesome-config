@@ -141,7 +141,6 @@ function calendar:show(year, month)
             hover_timeout = 0.5,
             screen = capi.mouse.screen,
             position = self.position,
-            border_width = 0,
         })
         self.num_lines = num_lines
     end
