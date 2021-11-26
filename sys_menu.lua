@@ -9,6 +9,7 @@ local sys_menu = wibox {
     height = 40 * 5,
     border_width = beautiful.menu_border_width,
     border_color = beautiful.menu_border_color,
+    shape = function(cr, w, h) return gears.shape.octogon(cr, w, h, w * 0.04) end,
 }
 
 local keys = {}
@@ -28,6 +29,7 @@ local function item(text, key, callback)
 end
 
 local layout = wibox.layout.flex.vertical()
+layout.spacing = 5
 layout:add(
     item("Poweroff", "S", function() awful.spawn("s6-sudo /run/s6-power-sudod poweroff") end),
     item("Reboot", "R", function() awful.spawn("s6-sudo /run/s6-power-sudod reboot") end),
@@ -39,7 +41,7 @@ layout:add(
 local ssaver_item = item("Screensaver", "a", nil)
 layout:add(ssaver_item)
 
-sys_menu.widget = wibox.container.margin(layout, 10)
+sys_menu.widget = wibox.container.margin(layout, 20, 20, 15, 15)
 
 function sys_menu:show()
     if self.visible then return end

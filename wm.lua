@@ -36,7 +36,7 @@ local swallow_rule = {
 }
 
 local function is_tiled(c)
-    if c == nil then return false end
+    if c == nil or awful.client.idx(c) == nil then return false end
     local layout = awful.layout.get(c.screen)
     return (layout == awful.layout.suit.tile or layout == awful.layout.suit.tile) and
         not c.minimized and not c.floating and not c.maximized and not c.fullscreen
