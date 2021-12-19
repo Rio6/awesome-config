@@ -1,7 +1,7 @@
 local awful = require("awful")
 local gears = require("gears")
 
-local multitime = 0.5
+local multitime = 0.1
 local longtime = 1
 
 local function try(f, ...)
@@ -19,7 +19,7 @@ return {
     register = function(key, multipress, longpress)
         local count = 0
         local pressed = false
-        local timer = gears.timer.new()
+        local timer = gears.timer.new { single_shot = true }
 
         timer:connect_signal("timeout", function()
             if pressed then
@@ -28,7 +28,6 @@ return {
                 try(multipress, key, count)
             end
             count = 0
-            timer:stop()
         end)
 
         return awful.key({}, key,
@@ -36,14 +35,14 @@ return {
                 if pressed then return end
                 count = count + 1
                 pressed = true
-                timer.timeout = longtime
+                timer.data.timeout = longtime
                 timer:again()
             end,
             function()
                 if not pressed then return end
-                pressed = nil
+                pressed = false
                 if not count then return end
-                timer.timeout = multitime
+                timer.data.timeout = multitime
                 timer:again()
             end
         )
