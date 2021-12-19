@@ -13,6 +13,7 @@ beautiful.theme_assets.recolor_layout(beautiful, beautiful.fg_dark)
 local menubox = require("menubox")
 local pwr_widget = require("pwr_widget")
 local wifi_widget = require("wifi_widget")
+local keyutil = require("keyutil")
 
 -- {{{ Error handling
 -- Check if awesome encountered an error during startup and fell back to
@@ -233,13 +234,27 @@ root.buttons(gears.table.join(
 
 -- {{{ Key bindings
 globalkeys = gears.table.join(
-    -- Standard program
-    awful.key({ }, "XF86AudioRaiseVolume", function() awful.spawn(os.getenv("HOME") .. "/.local/bin/keyboard toggle") end),
-    awful.key({ }, "XF86PowerOff", function() menubox.show() end)
-)
-
-clientkeys = gears.table.join(
-    awful.key({ }, "XF86AudioLowerVolume", function(c) c:kill() end)
+    keyutil.register("XF86AudioRaiseVolume", function(key, count)
+        if count == 1 then
+            awful.spawn(os.getenv("HOME") .. "/.local/bin/keyboard toggle")
+        elseif count == 2 then
+            menubox.show()
+        end
+    end),
+    keyutil.register("XF86AudioLowerVolume", function(key, count)
+        if count == 2 then
+            if client.focus then
+                client.focus:kill()
+            end
+        end
+    end),
+    keyutil.register("XF86PowerOff", function(key, count)
+        if count == 1 then
+            -- sleep
+        elseif count == 3 then
+            awesome.restart()
+        end
+    end)
 )
 
 clientbuttons = gears.table.join(
@@ -272,7 +287,7 @@ root.keys(globalkeys)
                 border_color = beautiful.border_normal,
                 focus = awful.client.focus.filter,
                 raise = true,
-                keys = clientkeys,
+                --keys = clientkeys,
                 buttons = clientbuttons,
                 screen = awful.screen.preferred,
                 placement = awful.placement.no_overlap+awful.placement.no_offscreen,
