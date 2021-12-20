@@ -2,8 +2,14 @@ local awful = require("awful")
 local gears = require("gears")
 
 local multitime = 0.3
-local longtime = 1
+local longtime = 0.6
 local shorttime = 0.3
+
+local alias = {
+    Power = "XF86PowerOff",
+    Up = "XF86AudioRaiseVolume",
+    Down = "XF86AudioLowerVolume",
+}
 
 local function try(f, ...)
     if f then
@@ -16,42 +22,89 @@ local function try(f, ...)
     return nil
 end
 
-return {
-    register = function(key, multipress, longpress)
-        local count = 0
-        local pressed = false
-        local timer = gears.timer.new()
+local function unalias(v)
+    return alias[v] or v
+end
 
-        timer:connect_signal("timeout", function()
-            if pressed then
-                try(longpress, key, count)
-                timer.data.timeout = shorttime
+local function list_to_string(list)
+    local string = ""
+    local last = nil
+    for i, v in ipairs(list) do
+        if type(v) == "number" then
+            if not last then error("First key can't be a number") end
+            for _ = 1, v do
+                string = string .. last
+            end
+        else
+            last = unalias(v)
+            string = string .. last
+        end
+    end
+    return string
+end
+
+--[[
+{
+    {"XF86AudioRaiseVolume", 2, "XF86PowerOff"}, function(duration, keys)
+    end,
+}
+--]]
+return function(handlers)
+    local timer = gears.timer.new()
+    local keyseq = {}
+    local pressed = nil
+    local count = 0
+
+    timer:connect_signal("timeout", function()
+        if pressed then
+            count = count + 1
+            local ret = try(handlers[list_to_string(keyseq)], count, keyseq)
+            if ret then
+                timer.timeout = shorttime
                 timer:again()
             else
-                try(multipress, key, count)
                 timer:stop()
             end
-            count = 0
-        end)
+        else
+            try(handlers[list_to_string(keyseq)], count, keyseq)
+            keyseq = {}
+            timer:stop()
+        end
+    end)
 
-        return awful.key({}, key,
-            function()
-                if pressed then return end
-                count = count + 1
-                pressed = true
-                timer.data.timeout = longtime
-                timer:again()
-            end,
-            function()
-                if not pressed then return end
-                pressed = false
-                if count == 0 then
-                    timer:stop()
-                else
-                    timer.data.timeout = multitime
-                    timer:again()
-                end
-            end
-        )
+    local function press(key)
+        return function()
+            if pressed == key then return end
+            pressed = key
+            count = 0
+            table.insert(keyseq, key)
+            timer.timeout = longtime
+            timer:again()
+        end
     end
-}
+
+    local function release(key)
+        return function()
+            if pressed ~= key then return end
+            pressed = nil
+            if count > 0 then return end
+            timer.timeout = multitime
+            timer:again()
+        end
+    end
+
+    local haskey = {}
+    local keys = {}
+    for i, handler in ipairs(handlers) do
+        for _, k in ipairs(handler[1]) do
+            k = unalias(k)
+            if not haskey[k] then 
+                haskey[k] = true
+                gears.table.merge(keys, awful.key({}, k, press(k), release(k)))
+            end
+        end
+        handlers[list_to_string(handler[1])] = handler[2]
+        handlers[i] = nil
+    end
+    return keys
+end

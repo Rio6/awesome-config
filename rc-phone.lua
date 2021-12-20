@@ -209,8 +209,8 @@ awful.screen.connect_for_each_screen(function(s)
             {
                 layout = wibox.layout.flex.horizontal,
                 pwr_widget("axp20x-battery"),
-                sound_widget,
                 wifi_widget("wlan0"),
+                sound_widget,
             }
         },
         { -- Right widgets
@@ -235,44 +235,101 @@ root.buttons(gears.table.join(
 
 -- {{{ Key bindings
 local first_wake = false
-globalkeys = gears.table.join(
-    keyutil.register("XF86AudioRaiseVolume", function(key, count)
-        if count == 1 then
-            sound_widget:volume("5%+")
-        elseif count == 2 then
+globalkeys = keyutil {
+    {
+        {"Up"},
+        function(duration)
+            if duration > 0 then
+                sound_widget:volume("5%+")
+            end
+            return true
+        end
+    },
+    {
+        {"Down"},
+        function(duration)
+            if duration > 0 then
+                sound_widget:volume("5%-")
+            end
+            return true
+        end
+    },
+    {
+        {"Up", "Up"},
+        function(duration)
+            awful.tag.viewprev()
+        end
+    },
+    {
+        {"Up", "Down"},
+        function(duration)
+            awful.tag.viewnext()
+        end
+    },
+    {
+        {"Down", "Up"},
+        function(duration)
+            awful.client.focus.byidx(-1)
+        end
+    },
+    {
+        {"Down", "Down"},
+        function(duration)
+            awful.client.focus.byidx(1)
+        end
+    },
+    {
+        {"Up", "Power"},
+        function(duration)
             menubox.show()
         end
-    end, function(key, count)
-        sound_widget:volume("5%+")
-    end),
-    keyutil.register("XF86AudioLowerVolume", function(key, count)
-        if count == 1 then
-            sound_widget:volume("5%-")
-        elseif count == 2 then
+    },
+    {
+        {"Down", "Power"},
+        function(duration)
             if client.focus then
                 client.focus:kill()
             end
         end
-    end, function(key, count)
-        sound_widget:volume("5%-")
-    end),
-    keyutil.register("XF86PowerOff", function(key, count)
-        if first_wake then
-            first_wake = false
-        elseif count == 1 then
-            awful.spawn(os.getenv("HOME") .. "/.local/bin/keyboard toggle")
-        elseif count == 2 then
-            first_wake = true
-            os.execute("sxmo_screenlock.sh crust && sxmo_screenlock.sh unlock")
-        elseif count == 3 then
-            awesome.restart()
+    },
+    {
+        {"Down", 1, "Up"},
+        function(duration)
+            if client.focus then
+                client.focus.maximized = not client.focus.maximized
+            end
         end
-    end, function(key, count)
-        if count == 2 then
-            awful.spawn("doas poweroff")
+    },
+    {
+        {"Power"},
+        function(duration)
+            if first_wake then
+                first_wake = false
+            elseif duration == 0 then
+                awful.spawn(os.getenv("HOME") .. "/.local/bin/keyboard toggle")
+            end
         end
-    end)
-)
+    },
+    {
+        {"Power", 1},
+        function(duration)
+            if duration == 0 then
+                first_wake = true
+                os.execute("sxmo_screenlock.sh crust && sxmo_screenlock.sh unlock")
+            else
+                os.execute("doas poweroff")
+            end
+        end
+    },
+    {
+        {"Power", 2},
+        function(duration)
+            if duration == 0 then
+                awesome.restart()
+            end
+        end
+    },
+}
 
 clientbuttons = gears.table.join(
     awful.button({ }, 1, function(c)
