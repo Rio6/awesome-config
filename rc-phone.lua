@@ -257,13 +257,21 @@ globalkeys = keyutil {
     {
         {"Up", "Up"},
         function(duration)
-            awful.tag.viewprev()
+            if duration == 0 then
+                awful.tag.viewprev()
+            else
+                awful.spawn.with_shell("keyboard off; sxmo_rotate.sh")
+            end
         end
     },
     {
         {"Up", "Down"},
         function(duration)
-            awful.tag.viewnext()
+            if duration == 0 then
+                awful.tag.viewnext()
+            else
+                awful.spawn.with_shell("keyboard off; sxmo_rotate.sh isrotated && sxmo_rotate.sh rotnormal || sxmo_rotate.sh rotleft")
+            end
         end
     },
     {

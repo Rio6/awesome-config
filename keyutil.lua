@@ -62,14 +62,14 @@ return function(handlers)
             if ret then
                 timer.timeout = shorttime
                 timer:again()
-            else
-                timer:stop()
+                return
             end
         else
             try(handlers[list_to_string(keyseq)], count, keyseq)
-            keyseq = {}
-            timer:stop()
         end
+
+        keyseq = {}
+        timer:stop()
     end)
 
     local function press(key)
