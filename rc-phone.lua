@@ -242,6 +242,8 @@ globalkeys = gears.table.join(
         elseif count == 2 then
             menubox.show()
         end
+    end, function(key, count)
+        sound_widget:volume("5%+")
     end),
     keyutil.register("XF86AudioLowerVolume", function(key, count)
         if count == 1 then
@@ -251,6 +253,8 @@ globalkeys = gears.table.join(
                 client.focus:kill()
             end
         end
+    end, function(key, count)
+        sound_widget:volume("5%-")
     end),
     keyutil.register("XF86PowerOff", function(key, count)
         if first_wake then

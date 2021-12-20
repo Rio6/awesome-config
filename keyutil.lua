@@ -3,6 +3,7 @@ local gears = require("gears")
 
 local multitime = 0.3
 local longtime = 1
+local shorttime = 0.3
 
 local function try(f, ...)
     if f then
@@ -19,13 +20,16 @@ return {
     register = function(key, multipress, longpress)
         local count = 0
         local pressed = false
-        local timer = gears.timer.new { single_shot = true }
+        local timer = gears.timer.new()
 
         timer:connect_signal("timeout", function()
             if pressed then
                 try(longpress, key, count)
+                timer.data.timeout = shorttime
+                timer:again()
             else
                 try(multipress, key, count)
+                timer:stop()
             end
             count = 0
         end)
@@ -41,9 +45,12 @@ return {
             function()
                 if not pressed then return end
                 pressed = false
-                if not count then return end
-                timer.data.timeout = multitime
-                timer:again()
+                if count == 0 then
+                    timer:stop()
+                else
+                    timer.data.timeout = multitime
+                    timer:again()
+                end
             end
         )
     end
