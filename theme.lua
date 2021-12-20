@@ -6,9 +6,9 @@ local naughty = require("naughty")
 local theme = {}
 
 local font_name     = "DroidSansMono Nerd Font "
-theme.font          = font_name .. 9
-theme.font_large    = font_name .. 11
-theme.font_menu     = font_name .. 17
+theme.font          = font_name .. 8
+theme.font_large    = font_name .. 10
+theme.font_menu     = font_name .. 15
 
 theme.bg_normal     = "#111111"
 theme.bg_focus      = "#505050"

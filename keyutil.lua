@@ -1,7 +1,7 @@
 local awful = require("awful")
 local gears = require("gears")
 
-local multitime = 0.1
+local multitime = 0.3
 local longtime = 1
 
 local function try(f, ...)

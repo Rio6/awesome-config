@@ -13,6 +13,7 @@ beautiful.theme_assets.recolor_layout(beautiful, beautiful.fg_dark)
 local menubox = require("menubox")
 local pwr_widget = require("pwr_widget")
 local wifi_widget = require("wifi_widget")
+local sound_widget = require("sound_widget")
 local keyutil = require("keyutil")
 
 -- {{{ Error handling
@@ -203,11 +204,12 @@ awful.screen.connect_for_each_screen(function(s)
         },
         {
             widget = wibox.container.margin,
-            left = dpi(20),
-            right = dpi(20),
+            left = dpi(5),
+            right = dpi(5),
             {
                 layout = wibox.layout.flex.horizontal,
                 pwr_widget("axp20x-battery"),
+                sound_widget,
                 wifi_widget("wlan0"),
             }
         },
@@ -216,7 +218,6 @@ awful.screen.connect_for_each_screen(function(s)
             shape = function(cr, w, h)
                 gears.shape.parallelogram(cr, w+20, h, w+10)
             end,
-            forced_width = 270,
             bg = beautiful.bg_colored,
             textclock,
         },
@@ -233,26 +234,38 @@ root.buttons(gears.table.join(
 -- }}}
 
 -- {{{ Key bindings
+local first_wake = false
 globalkeys = gears.table.join(
     keyutil.register("XF86AudioRaiseVolume", function(key, count)
         if count == 1 then
-            awful.spawn(os.getenv("HOME") .. "/.local/bin/keyboard toggle")
+            sound_widget:volume("5%+")
         elseif count == 2 then
             menubox.show()
         end
     end),
     keyutil.register("XF86AudioLowerVolume", function(key, count)
-        if count == 2 then
+        if count == 1 then
+            sound_widget:volume("5%-")
+        elseif count == 2 then
             if client.focus then
                 client.focus:kill()
             end
         end
     end),
     keyutil.register("XF86PowerOff", function(key, count)
-        if count == 1 then
-            -- sleep
+        if first_wake then
+            first_wake = false
+        elseif count == 1 then
+            awful.spawn(os.getenv("HOME") .. "/.local/bin/keyboard toggle")
+        elseif count == 2 then
+            first_wake = true
+            os.execute("sxmo_screenlock.sh crust && sxmo_screenlock.sh unlock")
         elseif count == 3 then
             awesome.restart()
+        end
+    end, function(key, count)
+        if count == 2 then
+            awful.spawn("doas poweroff")
         end
     end)
 )
