@@ -97,10 +97,12 @@ return function(handlers)
     local keys = {}
     for i, handler in ipairs(handlers) do
         for _, k in ipairs(handler[1]) do
-            k = unalias(k)
-            if not haskey[k] then 
-                haskey[k] = true
-                gears.table.merge(keys, awful.key({}, k, press(k), release(k)))
+            if type(k) == "string" then
+                k = unalias(k)
+                if not haskey[k] then
+                    haskey[k] = true
+                    gears.table.merge(keys, awful.key({}, k, press(k), release(k)))
+                end
             end
         end
         handlers[list_to_string(handler[1])] = handler[2]
