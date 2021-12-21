@@ -277,13 +277,21 @@ globalkeys = keyutil {
     {
         {"Down", "Up"},
         function(duration)
-            awful.client.focus.byidx(-1)
+            if duration == 0 then
+                awful.client.focus.byidx(-1)
+            else
+                awful.client.swap.byidx(-1)
+            end
         end
     },
     {
         {"Down", "Down"},
         function(duration)
-            awful.client.focus.byidx(1)
+            if duration == 0 then
+                awful.client.focus.byidx(1)
+            else
+                awful.client.swap.byidx(1)
+            end
         end
     },
     {
