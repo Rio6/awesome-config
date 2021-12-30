@@ -3,6 +3,15 @@ local gears = require("gears")
 local naughty = require("naughty")
 local beautiful = require("beautiful")
 
+local warned = false
+local warn_pcent = 10
+
+local pwr_widget = wibox.widget {
+    widget = wibox.widget.textbox,
+    align = "center",
+    font = beautiful.font_large,
+}
+
 return function(bat)
     -- power
     local function pwr_usage()
@@ -18,15 +27,6 @@ return function(bat)
 
         return rst
     end
-
-    local warned = false
-    local warn_pcent = 10
-
-    local pwr_widget = wibox.widget {
-        widget = wibox.widget.textbox,
-        align = "center",
-        font = beautiful.font_large,
-    }
 
     local function update()
         local usage = pwr_usage()
