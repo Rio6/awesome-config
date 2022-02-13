@@ -128,10 +128,10 @@ local textclock = wibox.widget {
 }
 require("calendar")({
     html = '<span font_desc="Droid Sans Mono">\n%s</span>',
-    col_title = "  %a  ",
-    today = '<b><span color="' .. beautiful.fg_colored .. '">%2i　</span></b>',
-    anyday = '%2i　',
-    empty_sep = "    　",
+    col_title = "   %u ",
+    today = '<b><span color="' .. beautiful.fg_colored .. '">%2i </span></b>',
+    anyday = '%2i ',
+    empty_sep = "     ",
     week_col = "",
     fdow = 7,
 }):attach(textclock)
@@ -425,6 +425,7 @@ globalkeys = awful.util.table.join(
 
     -- Cheatsheet
     awful.key({ modkey }, "a", function() cheatsheet.show("/array30.jpg", 1139, 550) end),
+    awful.key({ modkey }, "q", function() cheatsheet.show("/schedule.png", 699, 966) end),
     awful.key({ modkey }, ",", array_search.show_prompt),
 
     -- Screen shot
@@ -617,22 +618,9 @@ awful.rules.rules = {
         },
         properties = { floating = true }
     },
-
-    {
-        rule = {
-            class = "firefox"
-        },
-        properties = {
-            keys = awful.util.table.join(clientkeys,
-                awful.key({ "Control" }, "q"),
-                awful.key({ "Control", "Shift" }, "w")
-            )
-        }
-    },
 }
 
 -- Autostarts
 ---[[
 awful.spawn.with_shell("dex -a -e awesome")
-awful.spawn.with_shell("~/.local/bin/xss-lock-usr -- ~/.local/bin/lock " .. beautiful.wallpaper)
 --]]

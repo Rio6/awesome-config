@@ -33,9 +33,14 @@ layout.spacing = 5
 layout:add(
     item("Poweroff", "S", function() awful.spawn("s6-sudo /run/s6-power-sudod poweroff") end),
     item("Reboot", "R", function() awful.spawn("s6-sudo /run/s6-power-sudod reboot") end),
-    item("Suspend", "D", function() awful.spawn("s6-sudo /run/s6-power/sudod zzz") end),
+    item("Suspend", "D", function() awful.spawn("s6-sudo /run/s6-power-sudod zzz") end),
     item("Logout", "L", awesome.quit),
-    item("Lock", "l", function() awful.spawn.with_shell("xset s activate && sleep 0.5 && xset dpms force off") end)
+    item("Lock", "l", function() gears.timer {
+        timeout = 0.1,
+        autostart = true,
+        callback = function() awful.spawn("xset s activate") end,
+        single_shot = true,
+    } end)
 )
 
 local ssaver_item = item("Screensaver", "a", nil)
