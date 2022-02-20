@@ -126,16 +126,23 @@ local textclock = wibox.widget {
     align = "right",
     font = beautiful.font_large,
 }
-require("calendar")({
-    html = '<span font_desc="Droid Sans Mono">\n%s</span>',
-    col_title = "   %u ",
-    today = '<b><span color="' .. beautiful.fg_colored .. '">%2i </span></b>',
-    anyday = '%2i ',
-    empty_sep = "     ",
-    week_col = "",
-    fdow = 7,
-}):attach(textclock)
-
+local calendar = awful.widget.calendar_popup.month {
+    position = "tr",
+    font = beautiful.font_calendar,
+    long_weekdays = true,
+    star_sunday = true,
+    spacing = 10,
+    style_month = { padding = 10 },
+    style_focus = {
+        bg_color = beautiful.bg_normal,
+        fg_color = beautiful.fg_colored,
+        border_width = 0,
+    },
+    style_header = { border_width = 0 },
+    style_weekday = { border_width = 0 },
+    style_normal = { border_width = 0 },
+}
+calendar:attach(textclock)
 
 local systray = wibox.widget {
     widget = wibox.widget.systray,

@@ -31,8 +31,8 @@ client.connect_signal("unfocus", function(c) c.border_color = beautiful.border_n
 
 -- Window swallowing
 local swallow_rule = {
-    rule = { class = "XTerm" },
-    except = { name = "^%[WeeChat [%d.]+%]" },
+    -- rule = { class = "XTerm" },
+    -- except = { name = "^%[WeeChat [%d.]+%]" },
 }
 
 local function is_tiled(c)
@@ -45,28 +45,29 @@ end
 client.connect_signal("manage", function(c)
     local prev = awful.client.focus.history.get(c.screen, 1)
 
-    if is_tiled(prev) and is_tiled(c) then
+    --if prev ~= nil and c ~= nil then
+    --    -- Move client to beside the last focused window
+    --    local swapCount = awful.client.idx(prev).idx - awful.client.idx(c).idx
+    --    local dir = swapCount > 0 and 1 or -1
+    --    for i = 0, swapCount - dir, dir do
+    --        awful.client.swap.byidx(dir, c)
+    --    end
+    --end
 
-        -- Move client to beside the last focused window
-        local swapCount = awful.client.idx(prev).idx - awful.client.idx(c).idx
-        local dir = swapCount > 0 and 1 or -1
-        for i = 0, swapCount - dir, dir do
-            awful.client.swap.byidx(dir, c)
-        end
+    --if is_tiled(c) then
+    --    -- window swallowing
+    --    if awful.rules.matches(prev, swallow_rule) and not awful.rules.matches(c, swallow_rule) then
+    --        -- Restore swalowee when child is not tiled
+    --        c:connect_signal("property::floating_geometry", function(c)
+    --            if not is_tiled(c) then
+    --                unswallow(c, false)
+    --            end
+    --        end)
 
-        -- window swallowing
-        if awful.rules.matches(prev, swallow_rule) and not awful.rules.matches(c, swallow_rule) then
-            -- Restore swalowee when child is not tiled
-            c:connect_signal("property::floating_geometry", function(c)
-                if not is_tiled(c) then
-                    unswallow(c, false)
-                end
-            end)
-
-            prev.minimized = true
-            c.swallowed = prev
-        end
-    end
+    --        prev.minimized = true
+    --        c.swallowed = prev
+    --    end
+    --end
 end)
 
 -- Show or toggles swallowed window
