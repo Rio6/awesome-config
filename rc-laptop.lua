@@ -130,7 +130,7 @@ local calendar = awful.widget.calendar_popup.month {
     position = "tr",
     font = beautiful.font_calendar,
     long_weekdays = true,
-    star_sunday = true,
+    start_sunday = true,
     spacing = 10,
     style_month = { padding = 10 },
     style_focus = {
@@ -357,6 +357,21 @@ end)
 if not r then print(o) end
 --]]
 
+local function toggle_touchpad()
+    awful.spawn.easy_async("xinput", function(devices)
+        local id = devices:match("MSFT0001:01 06CB:CD64 Touchpad.-id=(%d)")
+        if id == nil then return end
+        awful.spawn.easy_async("xinput list-props " .. id, function(props)
+            local enabled = props:match("Device Enabled %(%d+%):%s+(%d)") == "1"
+            if enabled then
+                awful.spawn("xinput --disable " .. id)
+            else
+                awful.spawn("xinput --enable " .. id)
+            end
+        end)
+    end)
+end
+
 -- Key bindings
 globalkeys = awful.util.table.join(
     awful.key({ modkey, }, "Left", awful.tag.viewprev),
@@ -461,8 +476,9 @@ globalkeys = awful.util.table.join(
     awful.key({ modkey }, "#86", function() mpc_widget:update("stop") end),     -- KP plus
     awful.key({ }, "XF86MonBrightnessUp", function() backlight.inc(0.05) end),
     awful.key({ }, "XF86MonBrightnessDown", function() backlight.inc(-0.05) end),
-    awful.key({ "Control", "Mod1" }, "k", function () awful.spawn.with_shell("xkill") end),
-    awful.key({ modkey }, "/", translate.toggle)
+    awful.key({ modkey, "Control", "Mod1" }, "k", function () awful.spawn.with_shell("xkill") end),
+    awful.key({ modkey }, "/", translate.toggle),
+    awful.key({ modkey }, "F1", toggle_touchpad)
 )
 
 -- Bind all key numbers to tags.
