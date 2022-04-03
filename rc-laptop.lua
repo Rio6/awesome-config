@@ -364,9 +364,9 @@ local function toggle_touchpad()
         awful.spawn.easy_async("xinput list-props " .. id, function(props)
             local enabled = props:match("Device Enabled %(%d+%):%s+(%d)") == "1"
             if enabled then
-                awful.spawn("xinput --disable " .. id)
+                awful.spawn("xinput --disable " .. id, false)
             else
-                awful.spawn("xinput --enable " .. id)
+                awful.spawn("xinput --enable " .. id, false)
             end
         end)
     end)
