@@ -33,7 +33,7 @@ layout.spacing = 5
 layout:add(
     item("Poweroff", "S", function() awful.spawn("s6-sudo /run/s6-power-sudod poweroff") end),
     item("Reboot", "R", function() awful.spawn("s6-sudo /run/s6-power-sudod reboot") end),
-    item("Suspend", "D", function() awful.spawn("s6-sudo /run/s6-power-sudod zzz") end),
+    item("Suspend", "P", function() awful.spawn("s6-sudo /run/s6-power-sudod zzz") end),
     item("Logout", "L", awesome.quit),
     item("Lock", "l", function() awful.spawn("s6-svc -1 /run/service/locker") end)
 )
