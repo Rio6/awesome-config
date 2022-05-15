@@ -646,4 +646,5 @@ awful.rules.rules = {
 -- Autostarts
 ---[[
 awful.spawn.with_shell("dex -a -e awesome")
+awful.spawn(gears.filesystem.get_xdg_config_home() .. "sx/sxrc", false)
 --]]
