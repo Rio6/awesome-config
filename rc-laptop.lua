@@ -447,7 +447,7 @@ globalkeys = awful.util.table.join(
 
     -- Cheatsheet
     awful.key({ modkey }, "a", function() cheatsheet.show("/array30.jpg", 1139, 550) end),
-    awful.key({ modkey }, "q", function() cheatsheet.show("/schedule.png", 699, 966) end),
+    awful.key({ modkey }, "q", function() cheatsheet.show("/schedule.png", 572, 824) end),
     awful.key({ modkey }, ",", array_search.show_prompt),
 
     -- Screen shot
@@ -478,7 +478,7 @@ globalkeys = awful.util.table.join(
     awful.key({ }, "XF86MonBrightnessDown", function() backlight.inc(-0.05) end),
     awful.key({ modkey, "Control", "Mod1" }, "k", function () awful.spawn.with_shell("xkill") end),
     awful.key({ modkey }, "/", translate.toggle),
-    awful.key({ modkey }, "F1", toggle_touchpad)
+    awful.key({ modkey, "Control" }, "#93", toggle_touchpad)
 )
 
 -- Bind all key numbers to tags.
