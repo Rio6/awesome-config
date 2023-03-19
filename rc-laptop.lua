@@ -647,5 +647,7 @@ awful.rules.rules = {
 -- Autostarts
 ---[[
 awful.spawn("dex -a -e awesome", false)
-awful.spawn(gears.filesystem.get_xdg_config_home() .. "X/rc", false)
+gears.timer.start_new(1, function()
+    awful.spawn("display-layout.sh", false)
+end)
 --]]
