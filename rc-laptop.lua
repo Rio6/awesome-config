@@ -306,7 +306,7 @@ awful.screen.connect_for_each_screen(function(s)
                     text = "  ",
                     font = beautiful.font_large,
                 },
-                disk_widget({"/", "/tmp"})
+                disk_widget({"/", "/home/rio/tmp"})
             }
         },
         {
@@ -451,6 +451,7 @@ globalkeys = awful.util.table.join(
     awful.key({ modkey }, ",", array_search.show_prompt),
 
     -- Screen shot
+    awful.key({ modkey, "Shift" }, "s", function() awful.spawn.with_shell("screenshoot -s -o ~/tmp") end),
     awful.key({ }, "Print", function() awful.spawn.with_shell("screenshoot -o ~/tmp") end),
     awful.key({ "Control" }, "Print", function() awful.spawn.with_shell("screenshoot -w -o ~/tmp") end),
     awful.key({ "Shift" }, "Print", function() awful.spawn.with_shell("screenshoot -s -o ~/tmp") end),
@@ -645,6 +646,6 @@ awful.rules.rules = {
 
 -- Autostarts
 ---[[
-awful.spawn.with_shell("dex -a -e awesome")
-awful.spawn(gears.filesystem.get_xdg_config_home() .. "sx/sxrc", false)
+awful.spawn("dex -a -e awesome", false)
+awful.spawn(gears.filesystem.get_xdg_config_home() .. "X/rc", false)
 --]]

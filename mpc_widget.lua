@@ -167,7 +167,7 @@ function mpc_widget:update_state(state)
     if state ~= last_state then
         if state == "playing" then
             status_text:set_text(" ")
-            start_cava()
+            --start_cava()
         elseif state == "paused" then
             status_text:set_text(" ")
         else
