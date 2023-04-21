@@ -359,7 +359,7 @@ if not r then print(o) end
 
 local function toggle_touchpad()
     awful.spawn.easy_async("xinput", function(devices)
-        local id = devices:match("MSFT0001:01 06CB:CD64 Touchpad.-id=(%d)")
+        local id = devices:match("MSFT0001:01 06CB:CD64 Touchpad.-id=(%d+)")
         if id == nil then return end
         awful.spawn.easy_async("xinput list-props " .. id, function(props)
             local enabled = props:match("Device Enabled %(%d+%):%s+(%d)") == "1"
