@@ -20,10 +20,9 @@ local sys_widget = require("sys_widget")
 local net_widget = require("net_widget")
 local wifi_widget = require("wifi_widget")
 local pwr_widget = require("pwr_widget")
-local pac_widget = require("pac_widget")
+--local pac_widget = require("pac_widget")
 local disk_widget = require("disk_widget")
 local sound_widget = require("sound_widget")
-local mpc_widget = require("mpc_widget")
 local array_search = require("array_search")
 local backlight = require("backlight")
 local pie_layout = require("pie_layout")
@@ -271,7 +270,7 @@ awful.screen.connect_for_each_screen(function(s)
             systray,
             --awful.widget.keyboardlayout(),
             wibox.widget.textbox(" "),
-            pac_widget,
+            --pac_widget,
             wibox.widget.textbox(" "),
             pwr_widget("BAT0"),
             wibox.widget.textbox(" "),
@@ -317,7 +316,6 @@ awful.screen.connect_for_each_screen(function(s)
                 width = 200,
                 s.promptbox,
             },
-            mpc_widget,
         },
         {
             layout = wibox.layout.flex.horizontal,
@@ -468,13 +466,13 @@ globalkeys = awful.util.table.join(
     awful.key({ }, "XF86AudioRaiseVolume", function() sound_widget:volume("1%+") end),
     awful.key({ }, "XF86AudioLowerVolume", function() sound_widget:volume("1%-") end),
     awful.key({ }, "XF86AudioMute", function() sound_widget:volume("toggle") end),
-    awful.key({ }, "XF86AudioPlay", function() mpc_widget:update("toggle") end),
-    awful.key({ }, "XF86AudioPrev", function() mpc_widget:update("prev") end),
-    awful.key({ }, "XF86AudioNext", function() mpc_widget:update("next") end),
-    awful.key({ modkey }, "#63", function() mpc_widget:update("toggle") end),   -- KP multiply
-    awful.key({ modkey }, "#106", function() mpc_widget:update("prev") end),    -- KP slash
-    awful.key({ modkey }, "#82", function() mpc_widget:update("next") end),     -- KP minus
-    awful.key({ modkey }, "#86", function() mpc_widget:update("stop") end),     -- KP plus
+    awful.key({ }, "XF86AudioPlay", function() awful.spawn("playerctl play-pause", false) end),
+    awful.key({ }, "XF86AudioPrev", function() awful.spawn("playerctl previous", false) end),
+    awful.key({ }, "XF86AudioNext", function() awful.spawn("playerctl next", false) end),
+    awful.key({ modkey }, "#63", function() awful.spawn("playerctl play-pause", false) end), -- KP multiply
+    awful.key({ modkey }, "#106", function() awful.spawn("playerctl previou", false) end),   -- KP slash
+    awful.key({ modkey }, "#82", function() awful.spawn("playerctl next", false) end),       -- KP minus
+    awful.key({ modkey }, "#86", function() awful.spawn("playerctl stop", false) end),       -- KP plus
     awful.key({ }, "XF86MonBrightnessUp", function() backlight.inc(0.05) end),
     awful.key({ }, "XF86MonBrightnessDown", function() backlight.inc(-0.05) end),
     awful.key({ modkey, "Control", "Mod1" }, "k", function () awful.spawn.with_shell("xkill") end),
@@ -647,7 +645,7 @@ awful.rules.rules = {
 -- Autostarts
 ---[[
 awful.spawn("dex -a -e awesome", false)
-gears.timer.start_new(1, function()
+gears.timer.start_new(3, function()
     awful.spawn("display-layout.sh", false)
 end)
 --]]
