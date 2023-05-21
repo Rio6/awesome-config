@@ -325,7 +325,7 @@ awful.screen.connect_for_each_screen(function(s)
             sys_widget("temp"),
             sys_widget("cpu"),
             sys_widget("memory"),
-            sys_widget("swap"),
+            --sys_widget("swap"),
         },
     }
 end)
@@ -445,7 +445,7 @@ globalkeys = awful.util.table.join(
 
     -- Cheatsheet
     awful.key({ modkey }, "a", function() cheatsheet.show("/array30.jpg", 1139, 550) end),
-    awful.key({ modkey }, "q", function() cheatsheet.show("/schedule.png", 572, 824) end),
+    awful.key({ modkey }, "q", function() cheatsheet.show("/schedule.png", 576, 729) end),
     awful.key({ modkey }, ",", array_search.show_prompt),
 
     -- Screen shot
@@ -645,7 +645,5 @@ awful.rules.rules = {
 -- Autostarts
 ---[[
 awful.spawn("dex -a -e awesome", false)
-gears.timer.start_new(3, function()
-    awful.spawn("display-layout.sh", false)
-end)
+awful.spawn("display-layout.sh", false)
 --]]
