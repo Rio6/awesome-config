@@ -29,9 +29,9 @@ theme.fg_dark       = "#111111"
 theme.fg_dim        = "#333333"
 
 theme.useless_gap   = 0
-theme.border_width  = 1
+theme.border_width  = 1.2
 theme.border_normal = "#000000"
-theme.border_focus  = theme.bg_focus
+theme.border_focus  = "#707050"
 theme.border_marked = "#404040"
 theme.bar_height = dpi(22)
 
