@@ -295,19 +295,19 @@ local function menulist_update(scr)
 end
 
 
-menubox.widget_template.create_callback = function(w, _, i)
-    w:connect_signal("mouse::enter", function()
-        current_item = i
-        menulist_update()
-    end)
-
-    w:connect_signal("button::press", function(w, lx, ly, btn)
-        if btn == 1 then
-            perform_action(shownitems[current_item])
-            menubox.hide()
-        end
-    end)
-end
+--menubox.widget_template.create_callback = function(w, _, i)
+--    w:connect_signal("mouse::enter", function()
+--        current_item = i
+--        menulist_update()
+--    end)
+--
+--    w:connect_signal("button::press", function(w, lx, ly, btn)
+--        if btn == 1 then
+--            perform_action(shownitems[current_item])
+--            menubox.hide()
+--        end
+--    end)
+--end
 
 --- Refresh menubox's cache by reloading .desktop files.
 -- @tparam[opt] screen scr Screen.

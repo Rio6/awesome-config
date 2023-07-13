@@ -65,12 +65,10 @@ function sys_menu:show()
         autostart = true,
         stop_key = gears.table.join(gears.table.keys(keys), { 'Return', 'Escape' }),
         stop_event = "release",
-        keypressed_callback = function(self, mod, key, cmd)
+        stop_callback = function(_, key)
             if type(keys[key]) == "function" then
                 keys[key]()
             end
-        end,
-        stop_callback = function()
             self:hide()
         end,
     }

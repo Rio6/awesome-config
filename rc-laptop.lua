@@ -26,6 +26,7 @@ local sound_widget = require("sound_widget")
 local array_search = require("array_search")
 local backlight = require("backlight")
 local pie_layout = require("pie_layout")
+local screenshot = require("screenshot")
 
 -- Handle runtime errors after startup
 do
@@ -449,14 +450,10 @@ globalkeys = awful.util.table.join(
     awful.key({ modkey }, ",", array_search.show_prompt),
 
     -- Screen shot
-    awful.key({ modkey, "Shift" }, "s", function() awful.spawn.with_shell("screenshoot -s -o ~/tmp") end),
-    awful.key({ }, "Print", function() awful.spawn.with_shell("screenshoot -o ~/tmp") end),
-    awful.key({ "Control" }, "Print", function() awful.spawn.with_shell("screenshoot -w -o ~/tmp") end),
-    awful.key({ "Shift" }, "Print", function() awful.spawn.with_shell("screenshoot -s -o ~/tmp") end),
-    awful.key({ "Control", "Shift" }, "Print", function()
-        local geo = awful.screen.focused().geometry
-        awful.spawn.with_shell("screenshoot -a " .. string.format("%d,%d,%d,%d", geo.x, geo.y, geo.width, geo.height) .. " -o ~/tmp")
-    end),
+    awful.key({ modkey, "Shift" }, "s", screenshot.select),
+    awful.key({ }, "Print", screenshot.all),
+    awful.key({ "Shift" }, "Print", screenshot.select),
+    awful.key({ "Control" }, "Print", screenshot.screen),
 
     -- Others
     awful.key({ modkey }, "=", function() sound_widget:volume("1%+") end),
