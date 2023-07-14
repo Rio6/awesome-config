@@ -7,7 +7,7 @@ local function screenshot_with_option(opt)
         .. " | tee "
         .. os.getenv("HOME")
         .. "/tmp/" .. os.date("%Y-%m-%d-%H%M%S") .. ".png"
-        .. " | xclip -selection clipboard"
+        .. " | xclip -t image/png -selection clipboard"
     )
 end
 
