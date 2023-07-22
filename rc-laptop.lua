@@ -323,6 +323,7 @@ awful.screen.connect_for_each_screen(function(s)
             max_widget_size = 80,
             net_widget({"eth0", "wlan0"}, "rx"),
             net_widget({"eth0", "wlan0"}, "tx"),
+            sys_widget("curr"),
             sys_widget("temp"),
             sys_widget("cpu"),
             sys_widget("memory"),
@@ -632,7 +633,8 @@ awful.rules.rules = {
                 "Event Tester",  -- xev.
             },
             class = {
-                "scrcpy"
+                "scrcpy",
+                "arcan_sdl",
             }
         },
         properties = { floating = true }

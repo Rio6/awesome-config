@@ -52,17 +52,23 @@ local function sys_usage()
     usages.temp = tonumber(temp_input:read("*number") or 0) / 1000
     temp_input:close()
 
+    -- current
+    local curr_input = io.open("/sys/class/power_supply/BAT0/current_now")
+    usages.curr = tonumber(curr_input:read("*number") or 0) / 1000
+    curr_input:close()
+
     return usages
 end
 
 local function sys_widget(name)
-    local disp = { cpu = "", memory = "", swap = "", temp = "" }
+    local disp = { cpu = "", memory = "", swap = "", temp = "", curr = "⚡︎" }
 
     local widget = {
         name = name,
         graph = wibox.widget {
             widget = wibox.widget.graph,
-            max_value = 100,
+            max_value = name == "curr" and 1200 or 100,
+            min_value = name == "curr" and 200 or 0,
             color = beautiful.bg_graph,
             background_color = beautiful.bg_dark,
             border_color = beautiful.bg_normal,
