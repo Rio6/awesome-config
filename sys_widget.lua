@@ -67,7 +67,7 @@ local function sys_widget(name)
         name = name,
         graph = wibox.widget {
             widget = wibox.widget.graph,
-            max_value = name == "curr" and 1200 or 100,
+            max_value = name == "curr" and 2000 or 100,
             min_value = name == "curr" and 200 or 0,
             color = beautiful.bg_graph,
             background_color = beautiful.bg_dark,

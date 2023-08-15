@@ -27,6 +27,7 @@ local array_search = require("array_search")
 local backlight = require("backlight")
 local pie_layout = require("pie_layout")
 local screenshot = require("screenshot")
+local player_widget = require("player_widget")
 
 -- Handle runtime errors after startup
 do
@@ -310,13 +311,15 @@ awful.screen.connect_for_each_screen(function(s)
             }
         },
         {
-            layout = wibox.layout.fixed.horizontal,
+            layout = wibox.layout.align.horizontal,
             {
                 widget = wibox.container.constraint,
                 strategy = "min",
                 width = 200,
                 s.promptbox,
             },
+            player_widget,
+            nil,
         },
         {
             layout = wibox.layout.flex.horizontal,
@@ -464,13 +467,13 @@ globalkeys = awful.util.table.join(
     awful.key({ }, "XF86AudioRaiseVolume", function() sound_widget:volume("1%+") end),
     awful.key({ }, "XF86AudioLowerVolume", function() sound_widget:volume("1%-") end),
     awful.key({ }, "XF86AudioMute", function() sound_widget:volume("toggle") end),
-    awful.key({ }, "XF86AudioPlay", function() awful.spawn("playerctl play-pause", false) end),
-    awful.key({ }, "XF86AudioPrev", function() awful.spawn("playerctl previous", false) end),
-    awful.key({ }, "XF86AudioNext", function() awful.spawn("playerctl next", false) end),
-    awful.key({ modkey }, "#63", function() awful.spawn("playerctl play-pause", false) end), -- KP multiply
-    awful.key({ modkey }, "#106", function() awful.spawn("playerctl previou", false) end),   -- KP slash
-    awful.key({ modkey }, "#82", function() awful.spawn("playerctl next", false) end),       -- KP minus
-    awful.key({ modkey }, "#86", function() awful.spawn("playerctl stop", false) end),       -- KP plus
+    awful.key({ }, "XF86AudioPlay", function() player_widget:cmd("play-pause") end),
+    awful.key({ }, "XF86AudioPrev", function() player_widget:cmd("previous") end),
+    awful.key({ }, "XF86AudioNext", function() player_widget:cmd("next") end),
+    awful.key({ modkey }, "#63", function() player_widget:cmd("play-pause") end), -- KP multiply
+    awful.key({ modkey }, "#106", function() player_widget:cmd("previous") end),  -- KP slash
+    awful.key({ modkey }, "#82", function() player_widget:cmd("next") end),       -- KP minus
+    awful.key({ modkey }, "#86", function() player_widget:cmd("stop") end),       -- KP plus
     awful.key({ }, "XF86MonBrightnessUp", function() backlight.inc(0.05) end),
     awful.key({ }, "XF86MonBrightnessDown", function() backlight.inc(-0.05) end),
     awful.key({ modkey, "Control", "Mod1" }, "k", function () awful.spawn.with_shell("xkill") end),

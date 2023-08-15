@@ -99,7 +99,7 @@ theme.icon_theme = "Adwaita"
 
 theme.notification_font = theme.font_large
 theme.notification_icon_size = dpi(80)
-theme.notification_width = dpi(400)
+--theme.notification_width = dpi(400)
 theme.notification_shape = function(cr, w, h) return shape.octogon(cr, w, h, w * 0.04) end
 theme.notification_border_color = theme.fg_dim
 theme.notification_border_width = 2
