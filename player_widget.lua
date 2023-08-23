@@ -71,12 +71,15 @@ local player_widget = wibox.widget {
 }
 
 -- cava graph
+local run_cava = false
 local cava_cmd = "cava -p " .. gears.filesystem.get_configuration_dir() .. "/cava.conf"
 local cava_pid
 local function start_cava()
     if type(cava_pid) == "number" then return end
+    if not run_cava then return end
     cava_pid = awful.spawn.with_line_callback(cava_cmd, {
         stdout = function(line)
+            if cava_pid == nil then return end
             local i = 1
             for value in line:gmatch('[0-9]+') do
                 -- give it some overshoot
@@ -104,12 +107,12 @@ end
 
 local function show_popup()
     local info = ""
-    for _,item in ipairs { {"", state.artist}, {"", state.album} } do
+    for _,item in ipairs { {"", state.artist}, {"", state.album} } do
         if item[2] ~= "" then
-            info = info .. string.format(" ├ %s %s\n", item[1], item[2])
+            info = info .. string.format("  %s %s\n", item[1], item[2])
         end
     end
-    info = info ..  string.format(" └  %s", state.position)
+    --info = info ..  string.format("   %s", state.position)
 
     popup = naughty.notify({
         replaces_id = popup,
@@ -151,6 +154,7 @@ function player_widget:update()
             start_cava()
         elseif state.status == "Paused" then
             status_text:set_text(" ")
+            stop_cava()
         else
             status_text:set_text(" ")
             stop_cava()
@@ -159,7 +163,7 @@ function player_widget:update()
     end
 
     if state.status == "Playing" or state.status == "Paused" then
-        if artist ~= "" then
+        if state.artist ~= "" then
             title_text:set_text(string.format("%s - %s", state.title, state.artist))
         else
             title_text:set_text(state.title)
@@ -179,16 +183,19 @@ player_widget:connect_signal("button::press", function(widget, x, y, button, mod
     local ratio = x / widget.width
     if button == 1 then
         if ratio < 0.3 then
-            player_widget:cmd("prev")
+            player_widget:cmd("previous")
         elseif ratio > 0.6 then
             player_widget:cmd("next")
         else
-            player_widget:cmd("toggle")
+            player_widget:cmd("play-pause")
         end
     elseif button == 2 then
         player_widget:cmd("stop")
-    elseif button == 3 and duration > 0 then
+    --elseif button == 3 and duration > 0 then
         --player_widget:cmd("position " .. math.floor(ratio * duration + .5))
+    elseif button == 3 then
+        run_cava = not run_cava
+        if run_cava then start_cava() else stop_cava() end
     elseif button == 4 then
         player_widget:cmd("previous")
     elseif button == 5 then
