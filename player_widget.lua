@@ -6,6 +6,7 @@ local beautiful = require("beautiful")
 
 local COVER_PATH = "/tmp/rio/awesome/cover.png"
 local DEFAULT_COVER = gears.filesystem.get_configuration_dir() .. "/music.png"
+local CAVA_NUM_BARS = 200
 
 local state = {
     status = "Stopped",
@@ -42,7 +43,7 @@ local bars = wibox.widget {
     color = beautiful.bg_graph,
     background_color = beautiful.bg_normal,
 }
-bars:set_width((bars.step_width + bars.step_spacing) * 200)
+bars:set_width((bars.step_width + bars.step_spacing) * CAVA_NUM_BARS)
 
 local player_widget = wibox.widget {
     widget = wibox.container.margin,
@@ -80,11 +81,11 @@ local function start_cava()
     cava_pid = awful.spawn.with_line_callback(cava_cmd, {
         stdout = function(line)
             if cava_pid == nil then return end
-            local i = 1
+            local i = CAVA_NUM_BARS
             for value in line:gmatch('[0-9]+') do
                 -- give it some overshoot
                 bars._private.values[i] = math.min(tonumber(value) * 1.8, bars.max_value)
-                i = i + 1
+                i = i - 1
             end
             bars:emit_signal("widget::redraw_needed")
         end,
