@@ -59,7 +59,7 @@ awful.layout.layouts = {
 
 -- wm configs
 awful.mouse.snap.edge_enabled = false
-awful.mouse.drag_to_tag.enabled = true
+awful.mouse.drag_to_tag.enabled = false
 
 -- Menubar configuration
 menubox.utils.terminal = terminal -- Set the terminal for applications that require it
@@ -450,7 +450,7 @@ globalkeys = awful.util.table.join(
 
     -- Cheatsheet
     awful.key({ modkey }, "a", function() cheatsheet.show("/array30.jpg", 1139, 550) end),
-    awful.key({ modkey }, "q", function() cheatsheet.show("/schedule.png", 576, 729) end),
+    awful.key({ modkey }, "q", function() cheatsheet.show("/schedule.png", 691, 1108) end),
     awful.key({ modkey }, ",", array_search.show_prompt),
 
     -- Screen shot
@@ -631,9 +631,13 @@ awful.rules.rules = {
         rule_any = {
             instance = {
                 "gcin",
+                "qjackctl",
             },
             name = {
                 "Event Tester",  -- xev.
+                "Animate Assembly", -- Assembly 4
+                "Add Variable", -- Assembly 4
+                "Insert a Part", -- Assembly 4
             },
             class = {
                 "scrcpy",
