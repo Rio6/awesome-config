@@ -84,7 +84,7 @@ function translate.toggle()
 
     text = selection():gsub("'", "'\"'\"'")
     local cmd = ([[
-        if trans -id '{text}' | grep Chinese > /dev/null; then
+        if trans -id '{text}' | grep -q Chinese; then
             trans {config} :en '{text}' | sed 's/[^[:print:]\t]\[[0-9]\+m//g'
         else
             trans {config} :zh-TW '{text}' | sed 's/[^[:print:]\t]\[[0-9]\+m//g'
