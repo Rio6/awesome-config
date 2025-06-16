@@ -35,7 +35,8 @@ layout:add(
     item("Reboot", "R", function() awful.spawn("s6-sudo /run/s6-power-sudod reboot") end),
     item("Suspend", "P", function() awful.spawn("s6-sudo /run/s6-power-sudod zzz") end),
     item("Logout", "L", awesome.quit),
-    item("Lock", "l", function() awful.spawn("s6-svc -1 /run/service/locker") end)
+    --item("Lock", "l", function() awful.spawn("s6-svc -1 /run/service/locker") end)
+    item("Lock", "l", function() awful.spawn("xset dpms force off") end)
 )
 
 local ssaver_item = item("Screensaver", "a", nil)

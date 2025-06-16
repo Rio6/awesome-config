@@ -13,18 +13,18 @@ theme.font_menu     = font_name .. 15
 
 theme.bg_normal     = "#111111"
 theme.bg_focus      = "#505050"
-theme.bg_urgent     = "#bc2323"
+theme.bg_urgent     = "#e22833"
 theme.bg_minimize   = "#303030"
 theme.bg_systray    = theme.bg_normal
 theme.bg_dark       = "#000000"
-theme.bg_colored    = "#c6ae11"
-theme.bg_graph      = "#756500"
+theme.bg_colored    = "#e22833"
+theme.bg_graph      = theme.bg_colored
 
 theme.fg_normal     = "#cccccc"
 theme.fg_focus      = "#dddddd"
 theme.fg_urgent     = "#ffffff"
 theme.fg_minimize   = "#ffffff"
-theme.fg_colored    = "#c6ae11"
+theme.fg_colored    = theme.bg_colored
 theme.fg_dark       = "#111111"
 theme.fg_dim        = "#333333"
 

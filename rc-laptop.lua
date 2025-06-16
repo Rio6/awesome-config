@@ -450,7 +450,7 @@ globalkeys = awful.util.table.join(
 
     -- Cheatsheet
     awful.key({ modkey }, "a", function() cheatsheet.show("/array30.jpg", 1139, 550) end),
-    awful.key({ modkey }, "q", function() cheatsheet.show("/schedule.png", 691, 1108) end),
+    awful.key({ modkey }, "q", function() cheatsheet.show("/schedule.png", 694, 1092) end),
     awful.key({ modkey }, ",", array_search.show_prompt),
 
     -- Screen shot
@@ -632,6 +632,7 @@ awful.rules.rules = {
             instance = {
                 "gcin",
                 "qjackctl",
+                "zenity",
             },
             name = {
                 "Event Tester",  -- xev.
@@ -642,6 +643,7 @@ awful.rules.rules = {
             class = {
                 "scrcpy",
                 "arcan_sdl",
+                "FluidSynth-DSSI_gtk",
             }
         },
         properties = { floating = true }
