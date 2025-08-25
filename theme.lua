@@ -13,7 +13,7 @@ theme.font_menu     = font_name .. 15
 
 theme.bg_normal     = "#111111"
 theme.bg_focus      = "#505050"
-theme.bg_urgent     = "#e22833"
+theme.bg_urgent     = "#e25428"
 theme.bg_minimize   = "#303030"
 theme.bg_systray    = theme.bg_normal
 theme.bg_dark       = "#000000"
@@ -71,7 +71,14 @@ theme.menu_width  = dpi(100)
 -- you wish and access them by using
 -- beautiful.variable in your rc.lua
 
-theme.wallpaper = "~/.config/awesome/wallpaper.png"
+theme.wallpaper = function(s)
+    local home = os.getenv("HOME")
+    if screen.count() == 1 or s.geometry.width > 2000 then
+        return home .. "/.config/awesome/wallpaper.png"
+    else
+        return home .. "/.config/awesome/wallpaper-2.png"
+    end
+end
 
 -- You can use your own layout icons like this:
 theme.layout_fairh = "/usr/share/awesome/themes/default/layouts/fairhw.png"

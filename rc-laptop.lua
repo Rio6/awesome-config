@@ -6,6 +6,7 @@ local naughty = require("naughty")
 local beautiful = require("beautiful")
 local gears = require("gears")
 require("awful.autofocus")
+--require('awesomewm-micky')
 
 local wm = require("wm")
 beautiful.init(gears.filesystem.get_configuration_dir() .. "/theme.lua")
@@ -122,6 +123,10 @@ local tasklist_buttons = awful.util.table.join(
     end)
 )
 
+local calendar_popup_call_calendar = awful.widget.calendar_popup.call_calendar
+function awful.widget.calendar_popup:call_calendar(offset, position, screen)
+    calendar_popup_call_calendar(self, offset, position, mouse.screen)
+end
 local textclock = wibox.widget {
     widget = wibox.widget.textclock('<span color="' .. beautiful.fg_dark .. '"> %w|%m%d|%H%M%S </span>', 1),
     align = "right",
@@ -302,11 +307,6 @@ awful.screen.connect_for_each_screen(function(s)
             bg = beautiful.bg_minimize,
             {
                 layout = wibox.layout.fixed.horizontal,
-                {
-                    widget = wibox.widget.textbox,
-                    text = "  ",
-                    font = beautiful.font_large,
-                },
                 disk_widget({"/", "/home/rio/tmp"})
             }
         },
