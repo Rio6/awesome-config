@@ -20,6 +20,6 @@ return {
         screenshot_with_option(string.format("-g %dx%d+%d+%d", g.width, g.height, g.x, g.y))
     end,
     select = function()
-        screenshot_with_option("-u -s")
+        screenshot_with_option("--hidecursor --select")
     end,
 }

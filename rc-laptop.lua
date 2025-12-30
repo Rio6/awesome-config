@@ -401,14 +401,14 @@ globalkeys = awful.util.table.join(
     awful.key({ modkey }, "Down", function () awful.screen.focus_relative( 1) end),
     awful.key({ modkey }, "Up", function () awful.screen.focus_relative(-1) end),
     awful.key({ modkey, }, "u", awful.client.urgent.jumpto),
-    awful.key({ modkey, }, "Tab",
-        function ()
-            awful.client.focus.history.previous()
-            if client.focus then
-                client.focus:raise()
-            end
-        end
-    ),
+    --awful.key({ modkey, }, "Tab",
+    --    function ()
+    --        awful.client.focus.history.previous()
+    --        if client.focus then
+    --            client.focus:raise()
+    --        end
+    --    end
+    --),
 
     -- Standard program
     awful.key({ modkey, }, "Return", function () awful.spawn(terminal) end),
@@ -450,7 +450,6 @@ globalkeys = awful.util.table.join(
 
     -- Cheatsheet
     awful.key({ modkey }, "a", function() cheatsheet.show("/array30.jpg", 1139, 550) end),
-    awful.key({ modkey }, "q", function() cheatsheet.show("/schedule.png", 694, 1092) end),
     awful.key({ modkey }, ",", array_search.show_prompt),
 
     -- Screen shot
@@ -630,7 +629,7 @@ awful.rules.rules = {
     {
         rule_any = {
             instance = {
-                "gcin",
+                "fcitx",
                 "qjackctl",
                 "zenity",
             },
@@ -644,6 +643,7 @@ awful.rules.rules = {
                 "scrcpy",
                 "arcan_sdl",
                 "FluidSynth-DSSI_gtk",
+                "fcitx5-config-qt",
             }
         },
         properties = { floating = true }
@@ -652,6 +652,6 @@ awful.rules.rules = {
 
 -- Autostarts
 ---[[
-awful.spawn("dex -a -e awesome", false)
+--awful.spawn("dex -a -e awesome", false)
 awful.spawn("display-layout.sh", false)
 --]]

@@ -240,8 +240,7 @@ local function menulist_update(scr)
 
             -- check if the query matches either the name or the commandline
             -- of some entry
-            if string.match(v.name, pattern)
-                or string.match(v.cmdline, pattern) then
+            if string.match(v.name, pattern) then --or string.match(v.cmdline, pattern) then
 
                 v.weight = 0
                 v.prio = PRIO_NONE
