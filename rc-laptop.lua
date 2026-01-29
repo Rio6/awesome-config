@@ -30,20 +30,17 @@ local pie_layout = require("pie_layout")
 local screenshot = require("screenshot")
 local player_widget = require("player_widget")
 
--- Handle runtime errors after startup
-do
-    local in_error = false
-    awesome.connect_signal("debug::error", function (err)
-        -- Make sure we don't go into an endless error loop
-        if in_error then return end
-        in_error = true
-
-        naughty.notify({ preset = naughty.config.presets.critical,
-                         title = "Oops, an error happened!",
-                         text = tostring(err) })
-        in_error = false
-    end)
-end
+-- {{{ Error handling
+-- Check if awesome encountered an error during startup and fell back to
+-- another config (This code will only ever execute for the fallback config)
+naughty.connect_signal("request::display_error", function(message, startup)
+    naughty.notification {
+        urgency = "critical",
+        title   = "Oops, an error happened"..(startup and " during startup!" or "!"),
+        message = message
+    }
+end)
+-- }}}
 
 -- Variables
 terminal = os.getenv("TERMINAL") or "xterm"
@@ -66,7 +63,20 @@ awful.mouse.drag_to_tag.enabled = false
 menubox.utils.terminal = terminal -- Set the terminal for applications that require it
 menubox.refresh()
 
--- Create wibars
+local function set_wallpaper(s)
+    -- Wallpaper
+    if beautiful.wallpaper then
+        local wallpaper = beautiful.wallpaper
+        -- If wallpaper is a function, call it with the screen
+        if type(wallpaper) == "function" then
+            wallpaper = wallpaper(s)
+        end
+        gears.wallpaper.maximized(wallpaper, s, false)
+    end
+end
+screen.connect_signal("property::geometry", set_wallpaper)
+
+-- {{{ Create wibars
 local function client_menu_toggle_fn()
     local instance = nil
 
@@ -150,20 +160,6 @@ local systray = wibox.widget {
     widget = wibox.widget.systray,
     visible = false,
 }
-
-local function set_wallpaper(s)
-    -- Wallpaper
-    if beautiful.wallpaper then
-        local wallpaper = beautiful.wallpaper
-        -- If wallpaper is a function, call it with the screen
-        if type(wallpaper) == "function" then
-            wallpaper = wallpaper(s)
-        end
-        gears.wallpaper.maximized(wallpaper, s, false)
-    end
-end
-
-screen.connect_signal("property::geometry", set_wallpaper)
 
 awful.screen.connect_for_each_screen(function(s)
     -- Wallpaper
@@ -330,32 +326,10 @@ awful.screen.connect_for_each_screen(function(s)
         },
     }
 end)
---[[
-local r, o = pcall(function()
-    local pie = wibox.widget {
-        widget = pie_layout,
-        force_radius = 250,
-    }
 
-    for i = 2, 3 do
-        for j = 1, 3 do
-            pie:add_widget_at(wibox.widget {
-                widget = wibox.widget.textbox,
-                text = "hello",
-                align = "center",
-            }, i, j)
-        end
-    end
+-- }}}
 
-    local tw = awful.popup {
-        screen = screen[1],
-        shape = pie:shape(),
-        widget = pie,
-    }
-end)
-if not r then print(o) end
---]]
-
+-- {{{ Key bindings
 local function toggle_touchpad()
     awful.spawn.easy_async("xinput", function(devices)
         local id = devices:match("MSFT0001:01 06CB:CD64 Touchpad.-id=(%d+)")
@@ -371,7 +345,6 @@ local function toggle_touchpad()
     end)
 end
 
--- Key bindings
 globalkeys = awful.util.table.join(
     awful.key({ modkey, }, "Left", awful.tag.viewprev),
     awful.key({ modkey, }, "Right", awful.tag.viewnext),
@@ -615,15 +588,17 @@ clientkeys = awful.util.table.join(
         wm.unswallow(c, true)
     end)
 )
+-- }}}
 
--- Buttons
+-- {{{ Buttons
 clientbuttons = awful.util.table.join(
     awful.button({ }, 1, function (c) client.focus = c; c:raise() end),
     awful.button({ modkey }, 1, awful.mouse.client.move),
     awful.button({ modkey }, 3, awful.mouse.client.resize)
 )
+-- }}}
 
--- Rules
+-- {{{ Rules
 awful.rules.rules = {
     -- All clients will match this rule.
     {
@@ -666,9 +641,10 @@ awful.rules.rules = {
         properties = { floating = true }
     },
 }
+-- }}}
 
 -- Autostarts
----[[
 --awful.spawn("dex -a -e awesome", false)
 awful.spawn("display-layout.sh", false)
---]]
+
+-- vim: foldmethod=marker:
