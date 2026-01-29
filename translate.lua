@@ -64,7 +64,7 @@ box:connect_signal("button::release", function(box, x, y, btn)
     if btn == 1 then
         box.visible = false
     elseif btn == 3 then
-        awful.spawn.easy_async({ "trans", "-speak", text }, function() end)
+        awful.spawn.easy_async({ "trans", "-speak", "--", text }, function() end)
     elseif btn == 4 or btn == 5 then
         if btn == 4 then
             box.position = box.position + 40
@@ -85,9 +85,9 @@ function translate.toggle()
     text = selection():gsub("'", "'\"'\"'")
     local cmd = ([[
         if trans -id '{text}' | grep -q Chinese; then
-            trans {config} :en '{text}' | sed 's/[^[:print:]\t]\[[0-9]\+m//g'
+            trans {config} :en -- '{text}' | sed 's/[^[:print:]\t]\[[0-9]\+m//g'
         else
-            trans {config} :zh-TW '{text}' | sed 's/[^[:print:]\t]\[[0-9]\+m//g'
+            trans {config} :zh-TW -- '{text}' | sed 's/[^[:print:]\t]\[[0-9]\+m//g'
         fi
     ]]):gsub("{([^}]*)}", {
         ["config"] = translator_config,

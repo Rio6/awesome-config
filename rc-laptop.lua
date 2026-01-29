@@ -142,11 +142,7 @@ local calendar = awful.widget.calendar_popup.month {
     style_focus = {
         bg_color = beautiful.bg_normal,
         fg_color = beautiful.fg_colored,
-        border_width = 0,
     },
-    style_header = { border_width = 0 },
-    style_weekday = { border_width = 0 },
-    style_normal = { border_width = 0 },
 }
 calendar:attach(textclock)
 
@@ -564,6 +560,26 @@ clientkeys = awful.util.table.join(
             c.fullscreen = not c.fullscreen
             c:raise()
         end),
+    awful.key({ modkey, "Control" }, "f",
+        function (c)
+            c.fullscreen = not c.fullscreen
+            if c.fullscreen then
+                local bound = { math.huge, math.huge, -math.huge, -math.huge }
+                for s in screen do
+                    bound[1] = math.min(bound[1], s.geometry.x)
+                    bound[2] = math.min(bound[2], s.geometry.y)
+                    bound[3] = math.max(bound[3], s.geometry.x + s.geometry.width)
+                    bound[4] = math.max(bound[4], s.geometry.y + s.geometry.height)
+                end
+                c:geometry({
+                    x = bound[1],
+                    y = bound[2],
+                    width  = bound[3]-bound[1],
+                    height = bound[4]-bound[2],
+                })
+            end
+            c:raise()
+        end),
     awful.key({ modkey, }, "c", function (c) c:kill() end),
     awful.key({ modkey, "Control" }, "space", awful.client.floating.toggle),
     awful.key({ modkey, "Control" }, "Return", function (c)
@@ -638,6 +654,7 @@ awful.rules.rules = {
                 "Animate Assembly", -- Assembly 4
                 "Add Variable", -- Assembly 4
                 "Insert a Part", -- Assembly 4
+                "INDI Control Panel — KStars",
             },
             class = {
                 "scrcpy",

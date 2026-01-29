@@ -38,6 +38,10 @@ theme.bar_height = dpi(22)
 theme.menu_border_width = 1
 theme.menu_border_color = theme.border_focus
 
+theme.calendar_style = {
+    border_width = 0,
+}
+
 -- There are other variable sets
 -- overriding the default one when
 -- defined, the sets are:
