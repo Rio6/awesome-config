@@ -429,9 +429,9 @@ globalkeys = awful.util.table.join(
 
     -- Screen shot
     awful.key({ modkey, "Shift" }, "s", screenshot.select),
-    awful.key({ }, "Print", screenshot.all),
+    awful.key({ }, "Print", screenshot.screen),
     awful.key({ "Shift" }, "Print", screenshot.select),
-    awful.key({ "Control" }, "Print", screenshot.screen),
+    awful.key({ "Control" }, "Print", screenshot.all),
 
     -- Others
     awful.key({ modkey }, "=", function() sound_widget:volume("1%+") end),
