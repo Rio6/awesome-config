@@ -57,11 +57,25 @@ local function sys_usage()
     usages.curr = tonumber(curr_input:read("*number") or 0) / 1000
     curr_input:close()
 
+    -- gpu
+    local gpu_input = io.open("/sys/module/amdgpu/drivers/pci:amdgpu/0000:08:00.0/gpu_busy_percent")
+    usages.gpu = gpu_input and tonumber(gpu_input:read("*number") or 0) or 0
+    gpu_input:close()
+
+    -- vram
+    local vram_used_input = io.open("/sys/module/amdgpu/drivers/pci:amdgpu/0000:08:00.0/mem_info_vram_used")
+    local vram_used = vram_used_input and tonumber(vram_used_input:read("*number") or 0) or 0
+    vram_used_input:close()
+    local vram_total_input = io.open("/sys/module/amdgpu/drivers/pci:amdgpu/0000:08:00.0/mem_info_vram_total")
+    local vram_total = vram_total_input and tonumber(vram_total_input:read("*number") or 0) or 0
+    vram_total_input:close()
+    usages.vram = vram_used / vram_total
+
     return usages
 end
 
 local function sys_widget(name)
-    local disp = { cpu = "", memory = "", swap = "", temp = "", curr = "⚡︎" }
+    local disp = { cpu = "", memory = "", swap = "", temp = "", curr = "⚡︎", gpu = "󰘨", vram = "󰋥" }
 
     local widget = {
         name = name,

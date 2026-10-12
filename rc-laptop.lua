@@ -328,7 +328,8 @@ awful.screen.connect_for_each_screen(function(s)
             sys_widget("temp"),
             sys_widget("cpu"),
             sys_widget("memory"),
-            --sys_widget("swap"),
+            sys_widget("gpu"),
+            sys_widget("vram"),
         },
     }
 end)
