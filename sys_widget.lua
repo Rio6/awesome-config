@@ -69,7 +69,7 @@ local function sys_usage()
     local vram_total_input = io.open("/sys/module/amdgpu/drivers/pci:amdgpu/0000:08:00.0/mem_info_vram_total")
     local vram_total = vram_total_input and tonumber(vram_total_input:read("*number") or 0) or 0
     vram_total_input:close()
-    usages.vram = vram_used / vram_total
+    usages.vram = vram_used / vram_total * 100
 
     return usages
 end
